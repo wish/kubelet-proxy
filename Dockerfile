@@ -1,8 +1,21 @@
-FROM       golang:alpine as builder
+FROM --platform=$BUILDPLATFORM golang:1.14
 
-COPY . /go/src/github.com/wish/kubelet-proxy
-RUN cd /go/src/github.com/wish/kubelet-proxy/cmd/kubelet-proxy && CGO_ENABLED=0 go build
+ARG BUILDPLATFORM
+ARG TARGETARCH
+ARG TARGETOS
 
-FROM golang:alpine
+ENV GO111MODULE=on
+WORKDIR /go/src/github.com/wish/kubelet-proxy
 
-COPY --from=builder /go/src/github.com/wish/kubelet-proxy/cmd/kubelet-proxy/kubelet-proxy /bin/kubelet-proxy
+# Cache dependencies
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
+COPY . /go/src/github.com/wish/kubelet-proxy/
+
+RUN CGO_ENABLED=0 GOARCH=${TARGETARCH} GOOS=${TARGETOS} go build -o ./kubelet-proxy -a -installsuffix cgo ./cmd/kubelet-proxy
+
+FROM alpine:3.11
+RUN apk --no-cache add ca-certificates
+COPY --from=0 /go/src/github.com/wish/kubelet-proxy/kubelet-proxy /bin/kubelet-proxy
