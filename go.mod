@@ -1,12 +1,15 @@
 module github.com/wish/kubelet-proxy
 
-go 1.14
+go 1.15
 
 require (
 	github.com/jessevdk/go-flags v1.4.0
-	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
-	github.com/sirupsen/logrus v1.4.1
-	google.golang.org/appengine v1.5.0 // indirect
-	k8s.io/api v0.18.2 // indirect
-	k8s.io/client-go v0.17.0
+	github.com/mitchellh/go-homedir v1.1.0
+	github.com/sirupsen/logrus v1.6.0
+	github.com/stretchr/testify v1.6.1
+	golang.org/x/tools v0.0.0-20200902012652-d1954cc86c82 // indirect
+	gotest.tools v2.2.0+incompatible
+	k8s.io/api v0.19.0
+	k8s.io/apimachinery v0.19.0
+	k8s.io/client-go v0.19.0
 )
