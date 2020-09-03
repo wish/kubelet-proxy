@@ -1,1 +1,4 @@
 cmd/kubelet-proxy/kubelet-proxy
+
+/dev
+/integration_tests/tmp
